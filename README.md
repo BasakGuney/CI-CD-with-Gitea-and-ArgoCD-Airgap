@@ -106,7 +106,7 @@ Keep in mind the port number, we will use it.
 
 <br>
 
-Run the following command the learn the node where argocd works:
+Run the following command to learn the node where argocd works:
 ```bash
  kubectl get pods -n argocd -o wide
 ```

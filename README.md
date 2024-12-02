@@ -419,8 +419,11 @@ runner:
       - ./runner:/data
       - /var/run/docker.sock:/var/run/docker.sock
       - /root/.docker/config.json:/root/.docker/config.json
-```  
+```
 
+```bash
+docker compose down
+```
 
 Run the following to start runner:
 ```bash

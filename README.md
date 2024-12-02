@@ -65,9 +65,9 @@ Don't end this process while you're accessing to UI.
 
 Then on your host PC, open powershell and run the following command:
 ```bash
-ssh -L 8080:localhost:8080 user@<vm-ip>
+ssh -L 8080:localhost:8080 user@<server-machine-ip>
 ```
-The vm-ip is your master node's IP since you run the port-forward command there.  
+The server-machine-ip is your master node's IP since you run the port-forward command there.  
 
 <br>
 
@@ -121,28 +121,18 @@ Then go to the browser on your host PC and type following:
 ```txt
 http://<node-ip>:<node-port>
 ```
-
 Now, you have to be able view Argocd UI.
 
-#### Changing argocd-secret
-Sometimes you can encounter login issues with argocd even you give corret usrname and password.
-In this situation you can regenerate argocd-secret:
+Default username:
+```txt
+admin
+```
+Password:  
+Run the following command to get your password
+```bash
+kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 --decode ; echo
+```
 
-1. Delete the existing argocd-secret by:
-```bash
-kubectl delete secret argocd-secret
-```
-2. Generate a new bcrypt-encrypted admin password.
-```bash
-NEW_PASSWORD=$(htpasswd -nbBC 10 "" <new-password> | tr -d ':\n' | sed 's/^$2y/$2a/')
-```
-3. Create a secret with new password.
-```bash
-kubectl create secret generic argocd-secret \
-  --from-literal=admin.password="$NEW_PASSWORD" \
-  --from-literal=admin.passwordMtime="$(date +%FT%T%Z)"
-
-```
 
 ## 2. Gitea Set-up with Docker
 
@@ -511,4 +501,5 @@ revisionHistoryLimit: 0
 ```
 >You can add this line under replicas in spec part.
 This will delete all the old replicas and allow only the last committed replica remain. You can change the number suported with this specification to adjust the remaining replicas.
+
 

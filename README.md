@@ -137,7 +137,7 @@ kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.pas
 ## 2. Gitea Set-up with Docker
 
 #### Docker Installation 
-Make sure you have a added your private Docker repository.
+Make sure you have added your private Docker repository.
 
 ```bash
 yum install docker-ce

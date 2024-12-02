@@ -158,7 +158,7 @@ systemctl enable --now docker
  ```bash
 mkdir gitea
  ```
- Inside gitea directory create file named docker-compose.yaml:
+ Inside gitea directory create a file named docker-compose.yaml:
  ```bash
  cd gitea
  touch docker-compose.yml

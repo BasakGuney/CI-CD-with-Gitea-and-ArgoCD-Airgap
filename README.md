@@ -54,7 +54,7 @@ Make sure that each pod works successfully.
 ### ArgoCD UI Login
 ####  Option 1 - Port Forwarding
 
-Run the following command to forward argocd-server's 443 port to VMs 8080 port:
+Run the following command to forward argocd-server's 443 port to server machine's 8080 port:
 ```bash
 kubectl port-forward svc/argocd-server -n argocd 8080:443
 ```
@@ -71,7 +71,7 @@ The vm-ip is your master node's IP since you run the port-forward command there.
 
 <br>
 
-After this you can acces your VM's 8080 port from your host PC's 8080 port. Go to the web browser on your host PC and type following:
+After this you can acces your server machine's 8080 port from your host PC's 8080 port. Go to the web browser on your host PC and type following:
 ```txt
 http://localhost:8080
 ```

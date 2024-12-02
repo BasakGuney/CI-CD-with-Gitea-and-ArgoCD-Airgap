@@ -492,7 +492,7 @@ Then you can create the app by pressing the CREATE button.
 
 ## Additional Tips
 
-### 1. Delete Unused Deployment Replicas
+### 1. Deleting Unused Deployment Replicas
 
 > Even if you have choosed the prune-last option and only the old pods are deleted after the new commit, you can add the following in your deployment YAMLs.
 
@@ -503,3 +503,21 @@ revisionHistoryLimit: 0
 This will delete all the old replicas and allow only the last committed replica remain. You can change the number suported with this specification to adjust the remaining replicas.
 
 
+### 2. Changing Secret 
+> Sometimes argocd raises an issue while trying to login to UI even you give the correct username and password. To solve this problem you can regenerate argocd-secret.
+
+1. Delete the existing argocd-secret by:
+```bash
+kubectl delete secret argocd-secret
+```
+2. Generate a new bcrypt-encrypted admin password.
+```bash
+NEW_PASSWORD=$(htpasswd -nbBC 10 "" <new-password> | tr -d ':\n' | sed 's/^$2y/$2a/')
+```
+3. Create a secret with new password.
+```bash
+kubectl create secret generic argocd-secret \
+  --from-literal=admin.password="$NEW_PASSWORD" \
+  --from-literal=admin.passwordMtime="$(date +%FT%T%Z)"
+
+```

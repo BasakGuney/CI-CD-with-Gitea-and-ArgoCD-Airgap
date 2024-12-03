@@ -63,7 +63,7 @@ If you get "port already in use" error you can try 8000 instead of 8080.
 Don't end this process while you're accessing to UI.  
 <br>
 
-Then on your host PC, open powershell and run the following command:
+Then on your host machine, open powershell and run the following command:
 ```bash
 ssh -L 8080:localhost:8080 user@<server-machine-ip>
 ```
@@ -71,7 +71,7 @@ The server-machine-ip is your master node's IP since you run the port-forward co
 
 <br>
 
-After this you can acces your server machine's 8080 port from your host PC's 8080 port. Go to the web browser on your host PC and type following:
+After this you can acces your server machine's 8080 port from your host machine's 8080 port. Go to the web browser on your host machine and type following:
 ```txt
 http://localhost:8080
 ```
@@ -117,7 +117,7 @@ Run the follwing command and look for the IP of that node.
 kubectl get nodes -o wide
 ```
 
-Then go to the browser on your host PC and type following:
+Then go to the browser on your host machine and type following:
 ```txt
 http://<node-ip>:<node-port>
 ```
@@ -141,12 +141,15 @@ Make sure you have added your private Docker repository.
 
 ```bash
 yum install docker-ce
-```
+```  
+<br>
 
 Start Docker Engine.
 ```bash
 systemctl enable --now docker
 ```
+<br>
+
  Login Docker.
  ```bash
  docker login <registry.example.com>:<port>
@@ -158,11 +161,14 @@ systemctl enable --now docker
  ```bash
 mkdir gitea
  ```
+<br>
+
  Inside gitea directory create a file named docker-compose.yaml:
  ```bash
  cd gitea
  touch docker-compose.yml
  ```
+<br>
 
  docker-compose.yml:
  ```txt
@@ -224,14 +230,14 @@ Then go to http://<IP-of-the-node-gitea-placed>:3000 on your browser
 After you complete initial configurtion you will be able to create your project.
 
 ### Creating Gitea Runner
-> We will create a Runner to ensure auto-build for our project images and updating our deployment yamls.
+> We will create a Runner to ensure auto-build for our project images and to update our deployment yamls.
 
 Add the followings to the end of the docker-compose.yml:
 ```txt
 runner:
     image: <your-private-registry>:<port>/gitea/act_runner:nightly
     environment:
-      GITEA_INSTANCE_URL: "http://<node-IP-gitea-works>:3000"
+      GITEA_INSTANCE_URL: "http://<node-ip-gitea-placed>:3000"
       GITEA_RUNNER_REGISTRATION_TOKEN: "<token>"
       GITEA_RUNNER_NAME: "Gitea Runner"
       DOCKER_CLI_EXPERIMENTAL: "enabled"
@@ -247,7 +253,7 @@ runner:
 
 ```
 ```txt
-<token> : Open your project on gitea and go Settings. On the left menu, click Actions than click Runners on opened menu. Then on the right side of the window, click Create new Runner and copy the token.
+<token> : Open your project on gitea and go Settings. On the left menu, click Actions then click Runners on opened menu. On the right side of the window, click Create new Runner and copy the token.
 
 Settings > Actions > Runner > Create new Runner
 ``` 
@@ -307,7 +313,7 @@ services:
   runner:
     image: <your-private-registry>:<port>/gitea/act_runner:nightly
     environment:
-      GITEA_INSTANCE_URL: "http://<node-IP-gitea-works>:3000"
+      GITEA_INSTANCE_URL: "http://<node-ip-gitea-placed>:3000"
       GITEA_RUNNER_REGISTRATION_TOKEN: "<token>"
       GITEA_RUNNER_NAME: "Gitea Runner"
       DOCKER_CLI_EXPERIMENTAL: "enabled"
@@ -405,9 +411,9 @@ runner:
     image: <your-private-registry>:<port>/gitea/act_runner:nightly
     environment:
       CONFIG_FILE: /config.yaml
-      GITEA_INSTANCE_URL: "http://:3000"
+      GITEA_INSTANCE_URL: "http://<node-ip-gitea-placed>:3000"
       GITEA_RUNNER_REGISTRATION_TOKEN: "gkeYdqVI5ZVLUFselfLrqCi9yrGoyd6a8dAwLGpR"
-      GITEA_RUNNER_NAME: "Gitea Runner-4"
+      GITEA_RUNNER_NAME: "Gitea Runner"
       DOCKER_CLI_EXPERIMENTAL: "enabled"
     depends_on:
       - server
@@ -419,8 +425,7 @@ runner:
       - ./runner:/data
       - /var/run/docker.sock:/var/run/docker.sock
       - /root/.docker/config.json:/root/.docker/config.json
-```
-
+```  
 ```bash
 docker compose down
 ```
@@ -506,7 +511,7 @@ revisionHistoryLimit: 0
 This will delete all the old replicas and allow only the last committed replica remain. You can change the number suported with this specification to adjust the remaining replicas.
 
 
-### 2. Changing Secret 
+### 2. Regenerating ArgoCD Secret
 > Sometimes argocd raises an issue while trying to login to UI even you give the correct username and password. To solve this problem you can regenerate argocd-secret.
 
 1. Delete the existing argocd-secret by:

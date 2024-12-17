@@ -1,4 +1,4 @@
-# CI/CD with Gitea and ArgoCD on Internet-free Environment
+# CI/CD with Gitea and ArgoCD Airgap
 
 ## Assumptions
 > We assume that your host machine has internet access and your servers haven't and you already created a rke2 kubernetes cluster including your server machines.
